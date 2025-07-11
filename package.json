@@ -1,0 +1,31 @@
+{
+  "name": "myproj1",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "fullstack": "concurrently \"npm run backend \" \"npm run frontend\"",
+    "frontend": "cd frontend && npm run dev",
+    "backend": "nodemon backend/index.js"
+  },
+  "keywords": [],
+  "type": "module",
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "body-parser": "^2.2.0",
+    "concurrently": "^9.2.0",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.0.1",
+    "express": "^5.1.0",
+    "framer-motion": "^12.23.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.16.1",
+    "multer": "^2.0.1",
+    "nodemon": "^3.1.10"
+  },
+  "devDependencies": {
+    "@tailwindcss/line-clamp": "^0.4.4"
+  }
+}
