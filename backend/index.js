@@ -21,6 +21,7 @@ const port = process.env.PORT || 3001;
 const app = express();
 
 
+const __dirname = path.resolve();
 
 //middlewares
 
@@ -37,11 +38,12 @@ app.use('/api/v1/message' , messageRoutes)
 
 
 
+app.use(express.static(path.join(__dirname ,"/frontend/dist" )))
 
 
-const __dirname = path.resolve();
 
-console.log('dirname', __dirname)
+
+
 
 
 
