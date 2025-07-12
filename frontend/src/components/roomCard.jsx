@@ -12,7 +12,7 @@ const RoomCard = ({ room ,fromadmin }) => {
   const { userinfo } = useSelector((state) => state.auth);
 
   const isPrivate = room.password && room.password.length > 0;
-  const isauthor = room.author?._id === userinfo.id;
+  const isauthor = room?.author?._id === userinfo.id;
   const navigate = useNavigate();
   const [deleteRoom] = useDeleteRoomMutation();
 

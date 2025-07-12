@@ -38,7 +38,7 @@ app.use('/api/v1/message' , messageRoutes)
 
 
 
-app.use(express.static(path.join(__dirname ,"/frontend/dist" )))
+// app.use(express.static(path.join(__dirname ,"/frontend/dist" )))
 
 
 
