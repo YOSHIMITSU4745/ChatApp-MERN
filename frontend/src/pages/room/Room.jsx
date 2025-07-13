@@ -71,7 +71,7 @@ const Room = () => {
 
       {/* 🔽 Messages Area */}
       <div className="flex-1 overflow-y-auto overflow-x space-y-3 px-2 mb-3">
-        {isLoading ? (
+        {(isLoading && isRoomLoading) ? (
             <Loader />
         ) : messages.length === 0 ? (
             <p className="text-gray-500 text-center">No messages yet.</p>
