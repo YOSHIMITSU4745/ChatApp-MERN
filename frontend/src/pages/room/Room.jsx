@@ -37,7 +37,8 @@ const Room = () => {
 
   return (
     <>
-    <RoomAccessGuard room={room} isLoading={isRoomLoading}/>
+    {isRoomLoading?(<Loader/>):(<RoomAccessGuard room={room} isLoading={isRoomLoading}/>)}
+    
     <div className="max-w-4xl mx-auto h-[90vh] p-4 bg-teal-50 rounded-2xl shadow-lg border border-teal-300 flex flex-col">
       {/* 🔼 Room Info Header */}
       {isRoomLoading ? (

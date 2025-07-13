@@ -22,7 +22,7 @@ const Navigation = () => {
   const navigate = useNavigate();
   const { userinfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const [logoutuser] = useLogoutMutation();
+  const [logoutuser,{isLoading}] = useLogoutMutation();
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
