@@ -2,7 +2,7 @@
 
 A full-stack chat application built with the **MERN stack** (MongoDB, Express, React, Node.js) featuring **room-based messaging**, **authentication**, **private rooms**, and a **modern UI**. Deployed on [Render](https://chatapp-frontend-6jnr.onrender.com).
 
-![chatapp-demo](https://your-screenshot-or-gif-url)
+![chatapp-demo](./screenshots/desktopview_home.png)
 
 ---
 
@@ -25,7 +25,7 @@ A full-stack chat application built with the **MERN stack** (MongoDB, Express, R
 
 | Desktop View | Mobile View |
 |--------------|-------------|
-| ![desktop](./screenshots/desktop.png) | ![mobile](./screenshots/mobile.png) |
+| ![desktop](./screenshots/loggedout.png) | ![mobile](./screenshots/mobile.png) |
 
 ---
 
