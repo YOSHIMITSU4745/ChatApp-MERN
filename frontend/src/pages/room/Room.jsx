@@ -87,7 +87,7 @@ const Room = () => {
                     minute: "2-digit",
                 })}
                 align={msg.sender._id === userinfo.id ? "right" : "left"}
-                isAuthor={room.author._id === msg.sender._id}
+                isAuthor={room?.author?._id === msg?.sender?._id}
                 refetch={refetch}
                 />
             ))
