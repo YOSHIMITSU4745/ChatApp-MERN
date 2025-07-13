@@ -25,7 +25,7 @@ A full-stack chat application built with the **MERN stack** (MongoDB, Express, R
 
 | Desktop View | Mobile View |
 |--------------|-------------|
-| ![desktop](./screenshots/loggedout.png) | ![mobile](./screenshots/Screenshot 2025-07-13 124332.png) |
+| ![desktop](./screenshots/loggedout.png) | ![mobile](./screenshots/Screenshot%2025-07-13%124332.png) |
 
 ---
 
