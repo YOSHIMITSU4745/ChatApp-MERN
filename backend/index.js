@@ -27,7 +27,7 @@ connectdb();
 const port = process.env.PORT || 3001;
 const app = express();
 
-const allowedCors = ["https://chatapp-frontend-6jnr.onrender.com"];
+const allowedCors = ["https://chatapp-frontend-6jnr.onrender.com","http://localhost:5173"];
 
 app.use(cors({origin:allowedCors,
     credentials:true

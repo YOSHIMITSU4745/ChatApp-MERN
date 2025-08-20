@@ -63,9 +63,11 @@ const SidebarUserMessages = () => {
             </div>
 
             {isLoading ? (
-              <Loader/>
+              <Loader />
             ) : messages.length === 0 ? (
-              <p className="text-gray-500">You haven't sent any messages yet.</p>
+              <p className="text-gray-500">
+                You haven't sent any messages yet.
+              </p>
             ) : (
               <div className="space-y-4">
                 {messages.map((msg, index) => (
@@ -97,6 +99,59 @@ const SidebarUserMessages = () => {
                         })}
                       </span>
                     </div>
+                    {msg.fileurl && (
+                      <div className="mt-2">
+                        {msg.filetype?.startsWith("image/") ? (
+                          <a
+                            href={msg.fileurl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <img
+                              src={msg.fileurl}
+                              alt="attachment"
+                              className="max-w-full rounded-lg border border-teal-200"
+                            />
+                          </a>
+                        ) : msg.filetype?.startsWith("video/") ? (
+                          <video
+                            src={msg.fileurl}
+                            controls
+                            className="max-w-full rounded-lg border border-teal-200"
+                          />
+                        ) : msg.filetype === "application/pdf" ? (
+                          <a
+                            href={msg.fileurl.replace(
+                              "/upload/",
+                              "/upload/fl_attachment/"
+                            )}
+                            target="_blank"
+                            className="inline-flex items-center gap-2 px-5 py-2 bg-teal-700 
+                                 text-white text-sm font-semibold rounded-full shadow-md 
+                                 hover:bg-teal-800 transition-all duration-200"
+                          >
+                            <FiDownload className="w-5 h-5" />
+                            {msg.fileurl.slice(
+                              msg.fileurl.lastIndexOf("/") + 1
+                            )}
+                          </a>
+                        ) : (
+                          <a
+                            href={msg.fileurl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-3 py-1.5 
+                                 bg-gray-200 text-gray-800 text-xs font-medium 
+                                 rounded-md shadow-sm hover:bg-gray-300 transition"
+                          >
+                            📎{" "}
+                            {msg.fileurl.slice(
+                              msg.fileurl.lastIndexOf("/") + 1
+                            )}
+                          </a>
+                        )}
+                      </div>
+                    )}
                     <p className="text-sm text-gray-800 line-clamp-2">
                       {msg.content}
                     </p>
