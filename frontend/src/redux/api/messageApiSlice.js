@@ -67,6 +67,7 @@ const messageApiSlice = apiSlice.injectEndpoints({
           url: `${CLOUDINARY_URL}/${cloudname}/auto/upload`,
           method: "POST",
           body: formdata,
+          credentials: "omit",
         };
       },
     }),
