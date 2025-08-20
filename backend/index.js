@@ -6,7 +6,7 @@ import userRoutes from './routes/userRoutes.js'
 import titleRoutes from './routes/titleRoutes.js'
 import roomRoutes from './routes/roomRoutes.js'
 import messageRoutes from './routes/messageRoutes.js'
-import { fileURLToPath } from 'url';
+import cors from 'cors'
 
 //files
 import connectdb from './config/db.js';
@@ -26,6 +26,12 @@ connectdb();
 
 const port = process.env.PORT || 3001;
 const app = express();
+
+const allowedCors = ["https://chatapp-frontend-6jnr.onrender.com"];
+
+app.use(cors({origin:allowedCors,
+    credentials:true
+}))
 
 
 const __dirname = path.resolve();

@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    
     "backend": "nodemon index.js",
     "start": "nodemon index.js",
-    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
+    "build": "npm install "
   },
   "keywords": [],
   "type": "module",
@@ -19,6 +18,7 @@
     "cloudinary": "^2.7.0",
     "concurrently": "^9.2.0",
     "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
     "dotenv": "^17.0.1",
     "express": "^5.1.0",
     "framer-motion": "^12.23.0",
