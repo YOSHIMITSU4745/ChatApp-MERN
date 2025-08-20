@@ -7,8 +7,8 @@ export default defineConfig({
   plugins: [react(),tailwindcss()],
   server: {
     proxy: {
-      '/api': 'https://chatapp-backend-oanc.onrender.com',
-      '/uploads': 'https://chatapp-backend-oanc.onrender.com',
+      '/api': 'http://localhost:3001',
+      '/uploads': 'http://localhost:3001',
     }
   },
 })
