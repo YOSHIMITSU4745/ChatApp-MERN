@@ -9,11 +9,20 @@ const messageApiSlice = apiSlice.injectEndpoints({
 
     endpoints:(builder)=>({
         createMessage:builder.mutation({
-            query:(data)=>({
-                url:`${MESSAGE_URL}`,
-                method:"POST",
-                body:data,
-            }),
+            query:({roomid,sender,content,file})=>{
+
+                const form = new FormData();
+                form.append("roomid",roomid);
+                form.append("sender",sender);
+                if(content) form.append('content',content);
+                if(file) form.append('file',file);
+                return{
+
+                    url:`${MESSAGE_URL}`,
+                    method:"POST",
+                    body:form,
+                };
+            },
             invalidatesTags:['Messages']
         }),
 

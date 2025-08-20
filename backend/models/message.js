@@ -12,7 +12,10 @@ const messageSchema = new mongoose.Schema(
       required: true,
       ref: "User",
     },
-    content: { type: String, required: true, trim: true },
+    content: { type: String,  trim: true },
+    fileurl :{type:String},
+    filetype :{type:String},
+
   },
   { timestamps: true }
 );

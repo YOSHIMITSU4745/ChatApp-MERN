@@ -1,6 +1,6 @@
+import dotenv from 'dotenv'
 import express from 'express'
 import cookieParser from 'cookie-parser';
-import dotenv from 'dotenv'
 import path from 'path'
 import userRoutes from './routes/userRoutes.js'
 import titleRoutes from './routes/titleRoutes.js'
@@ -10,9 +10,16 @@ import { fileURLToPath } from 'url';
 
 //files
 import connectdb from './config/db.js';
+import cloudinary,{initCloudinary} from "./config/cloudinary.js";
 
 //config
 dotenv.config();
+// console.log("Cloudinary config check:", {
+//   name: process.env.CLOUDINARY_CLOUD_NAME,
+//   key: process.env.CLOUDINARY_API_KEY,
+//   secret: process.env.CLOUDINARY_API_SECRET 
+// });
+initCloudinary();
 connectdb();
 
 

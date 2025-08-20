@@ -1,9 +1,22 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { FiMoreVertical, FiEdit2, FiTrash2 } from "react-icons/fi";
-import { useDeleteMessageMutation, useUpdateMessageMutation } from "../redux/api/messageApiSlice";
+import {
+  useDeleteMessageMutation,
+  useUpdateMessageMutation,
+} from "../redux/api/messageApiSlice";
 
-const MessageCard = ({ _id, username, content, time, align, isAuthor ,refetch}) => {
+const MessageCard = ({
+  _id,
+  username,
+  content,
+  fileurl,
+  filetype,
+  time,
+  align,
+  isAuthor,
+  refetch,
+}) => {
   const isRight = align === "right";
   // console.log('isAuthor', isAuthor)
   const [showMenu, setShowMenu] = useState(false);
@@ -11,14 +24,14 @@ const MessageCard = ({ _id, username, content, time, align, isAuthor ,refetch}) 
   const [editText, setEditText] = useState(content);
 
   const [updateMessage] = useUpdateMessageMutation();
-const [deletemessage] = useDeleteMessageMutation();
+  const [deletemessage] = useDeleteMessageMutation();
   const handleEdit = async () => {
     if (!editText.trim()) return;
 
     try {
-        // console.log(editText);
-        // console.log('_id', _id)
-      await updateMessage({id:_id,content:editText} );
+      // console.log(editText);
+      // console.log('_id', _id)
+      await updateMessage({ id: _id, content: editText });
       setEditing(false);
       setShowMenu(false);
       refetch();
@@ -27,23 +40,23 @@ const [deletemessage] = useDeleteMessageMutation();
     }
   };
 
-  const handleDelete = async()=>{
+  const handleDelete = async () => {
     try {
-     
-        await deletemessage(_id);
-        refetch();
-        
+      await deletemessage(_id);
+      refetch();
     } catch (error) {
-        console.error(error);
+      console.error(error);
     }
-  }
+  };
 
   return (
     <motion.div
       initial={{ opacity: 0, x: isRight ? 50 : -50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3 }}
-      className={`relative flex ${isRight ? "justify-end" : "justify-start"} px-2`}
+      className={`relative flex ${
+        isRight ? "justify-end" : "justify-start"
+      } px-2`}
     >
       <div
         className={`relative max-w-xs break-words p-3 rounded-xl shadow-md ${
@@ -63,7 +76,7 @@ const [deletemessage] = useDeleteMessageMutation();
             )}
           </span>
 
-          {isRight &&  (
+          {isRight && (
             <button
               onClick={() => setShowMenu(!showMenu)}
               className="text-white hover:text-teal-300 transition"
@@ -99,7 +112,50 @@ const [deletemessage] = useDeleteMessageMutation();
           </div>
         ) : (
           <>
-            <p className="text-sm">{content}</p>
+
+            {/* File attachments */}
+            {fileurl && (
+              <div className="mt-2">
+                {filetype?.startsWith("image/") ? (
+                  <a href={fileurl} target="_blank" rel="noopener noreferrer">
+
+                  <img
+                  src={fileurl}
+                  
+                  alt="attachment"
+                  className="max-w-full rounded-lg border border-teal-200"
+                  />
+                  </a>
+                ) : filetype?.startsWith("video/") ? (
+                  <video
+                  src={fileurl}
+                  controls
+                  className="max-w-full rounded-lg border border-teal-200"
+                  />
+                ) : filetype === "application/pdf" ? (
+                  <a
+                  href={fileurl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-blue-600 underline"
+                  >
+                    📄 View PDF
+                  </a>
+                ) : (
+                  <a
+                  href={fileurl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-blue-600 underline"
+                  >
+                    📎 Download file
+                  </a>
+                )}
+              </div>
+            )}
+            {/* Text message */}
+            {content && <p className="text-sm">{content}</p>}
+
             <p className="text-right text-xs mt-1 opacity-70">{time}</p>
           </>
         )}

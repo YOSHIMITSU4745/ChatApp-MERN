@@ -6,8 +6,8 @@
     "fullstack": "concurrently \"npm run backend \" \"npm run frontend\"",
     "frontend": "cd frontend && npm run dev",
     "backend": "nodemon backend/index.js",
-    "start":"nodemon backend/index.js",
-    "build":"npm install && npm install --prefix frontend && npm run build --prefix frontend"
+    "start": "nodemon backend/index.js",
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
   },
   "keywords": [],
   "type": "module",
@@ -17,6 +17,7 @@
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
+    "cloudinary": "^2.7.0",
     "concurrently": "^9.2.0",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.0.1",

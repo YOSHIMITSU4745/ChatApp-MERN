@@ -1,23 +1,65 @@
 import asyncHandler from "../middlewares/asynchHandler.js";
 import { Message } from "../models/message.js";
+import cloudinary,{initCloudinary} from "../config/cloudinary.js";
 
 
+
+const uploadToCloudinary = (fileBuffer , folder="messages")=>{
+
+//     console.log(process.env.CLOUDINARY_API_KEY );
+//  console.log(process.env.CLOUDINARY_SECRET_KEY );
+//  console.log(process.env.CLOUDINARY_CLOUD_NAME );
+ 
+    return new Promise((resolve,reject)=>{
+        const stream = cloudinary.uploader.upload_stream(
+            {folder,resource_type:"auto"},
+            (error,result) =>{
+                if(error) return reject(error);
+                resolve(result);
+            }
+        );
+        stream.end(fileBuffer);
+    });
+
+};
 
 
 const createMessage = asyncHandler(async(req,res)=>{
     const {roomid , sender , content} = req.body
+    const file = req.file
+    // console.log('req.body', req.body);
+    // console.log("roomid:", roomid);
+    // console.log("sender:", sender);
 
-    if(!roomid || !sender || !content) return res.status(400).json({error:"Fields are empty!"});
+    // console.log("content:", content);
+    // console.log("file:", req.file);
 
+    if(!roomid || !sender || !(content || file) ) return res.status(400).json({error:"Fields are empty!"});
+
+
+    let fileurl = null;
+    let filetype = null;
+    if(file){
+        filetype = file.mimetype;
+        try {
+            
+            const result = await uploadToCloudinary(file.buffer,"chat_files");
+            fileurl = result.secure_url;
+        } catch (err) {
+            console.log("cloudinary upload failed",err);
+            res.status(500).json({error:"file upload failed"});
+        }
+    }
     try {
         
-        const newmsg = new Message({roomid,sender,content})
+        
+        const newmsg = new Message({roomid,sender,content,fileurl,filetype})
         const created = await newmsg.save();
 
         if(!created)
             res.status(400).json({error:"Cant create message!"});
 
-        return res.status(201).json(created)
+        return res.status(201).json(created);
 
     } catch (error) {
         console.error(error)
