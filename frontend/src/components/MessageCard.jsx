@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { FiMoreVertical, FiEdit2, FiTrash2 } from "react-icons/fi";
+import { FiMoreVertical, FiEdit2, FiTrash2,FiDownload } from "react-icons/fi";
 import {
   useDeleteMessageMutation,
   useUpdateMessageMutation,
@@ -112,41 +112,41 @@ const MessageCard = ({
           </div>
         ) : (
           <>
-
             {/* File attachments */}
             {fileurl && (
               <div className="mt-2">
                 {filetype?.startsWith("image/") ? (
                   <a href={fileurl} target="_blank" rel="noopener noreferrer">
-
-                  <img
-                  src={fileurl}
-                  
-                  alt="attachment"
-                  className="max-w-full rounded-lg border border-teal-200"
-                  />
+                    <img
+                      src={fileurl}
+                      alt="attachment"
+                      className="max-w-full rounded-lg border border-teal-200"
+                    />
                   </a>
                 ) : filetype?.startsWith("video/") ? (
                   <video
-                  src={fileurl}
-                  controls
-                  className="max-w-full rounded-lg border border-teal-200"
+                    src={fileurl}
+                    controls
+                    className="max-w-full rounded-lg border border-teal-200"
                   />
                 ) : filetype === "application/pdf" ? (
                   <a
-                  href={fileurl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-blue-600 underline"
+                    href={fileurl.replace("/upload/", "/upload/fl_attachment/")}  //.replace("/upload/", "/upload/fl_attachment/")
+                    // download
+                    target="_blank"
+                    className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-teal-500 to-green-600 
+                 text-white text-sm font-semibold rounded-full shadow-lg 
+                 hover:from-green-600 hover:to-teal-700 transition-all duration-200"
                   >
-                    📄 View PDF
+                    <FiDownload className="w-5 h-5" />
+                    Download PDF
                   </a>
                 ) : (
                   <a
-                  href={fileurl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-blue-600 underline"
+                    href={fileurl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-blue-600 underline"
                   >
                     📎 Download file
                   </a>
