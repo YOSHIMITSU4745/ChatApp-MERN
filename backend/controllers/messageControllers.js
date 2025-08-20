@@ -1,64 +1,42 @@
 import asyncHandler from "../middlewares/asynchHandler.js";
 import { Message } from "../models/message.js";
-import cloudinary, { initCloudinary } from "../config/cloudinary.js";
 
-const uploadToCloudinary = (fileBuffer, folder = "messages", ext) => {
-  // console.log("extension = ",ext.split('/')[1]);
+import cloudinary from "cloudinary";
+import crypto from "crypto";
 
-  //     console.log(process.env.CLOUDINARY_API_KEY );
-  //  console.log(process.env.CLOUDINARY_SECRET_KEY );
-  //  console.log(process.env.CLOUDINARY_CLOUD_NAME );
-  const resourceType = ext.startsWith("image/")
-    ? "image"
-    : ext.startsWith("video/")
-    ? "video"
-    : "raw";
-  return new Promise((resolve, reject) => {
-    const stream = cloudinary.uploader.upload_stream(
-      {
-        folder,
-        resource_type: "auto",
-        format: ext.split("/")[1],
-        resource_type: resourceType,
-      },
-      (error, result) => {
-        if (error) return reject(error);
-        resolve(result);
-      }
-    );
-    stream.end(fileBuffer);
+
+
+const getSignature = asyncHandler(async (req, res) => {
+  const timestamp = Math.round(new Date().getTime() / 1000);
+  const API_SECRET = process.env.CLOUDINARY_API_SECRET;
+
+  const signature = cloudinary.v2.utils.api_sign_request(
+    { timestamp, folder: "chat_files", use_filename: true },
+    API_SECRET
+  );
+//   const stringToSign = `folder=chat_files&timestamp=${timestamp}`;
+
+//   const expectedSig = crypto
+//     .createHash("sha1")
+//     .update(stringToSign + API_SECRET)
+//     .digest("hex");
+
+//   console.log("Expected Signature:", expectedSig);
+
+  res.status(200).json({
+    timestamp,
+    signature,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   });
-};
+});
 
 const createMessage = asyncHandler(async (req, res) => {
-  const { roomid, sender, content } = req.body;
-  const file = req.file;
-  // console.log('req.body', req.body);
-  // console.log("roomid:", roomid);
-  // console.log("sender:", sender);
+  const { roomid, sender, content, fileurl, filetype } = req.body;
 
-  // console.log("content:", content);
-  // console.log("file:", req.file);
-
-  if (!roomid || !sender || !(content || file))
+  if (!roomid || !sender || !(content || fileurl))
     return res.status(400).json({ error: "Fields are empty!" });
 
-  let fileurl = null;
-  let filetype = null;
-  if (file) {
-    filetype = file.mimetype;
-    try {
-      const result = await uploadToCloudinary(
-        file.buffer,
-        "chat_files",
-        file.mimetype
-      );
-      fileurl = result.secure_url;
-    } catch (err) {
-      console.log("cloudinary upload failed", err);
-      res.status(500).json({ error: "file upload failed" });
-    }
-  }
   try {
     const newmsg = new Message({ roomid, sender, content, fileurl, filetype });
     const created = await newmsg.save();
@@ -113,10 +91,31 @@ const updateMessage = asyncHandler(async (req, res) => {
 
 const deleteMessage = asyncHandler(async (req, res) => {
   const { id } = req.params;
+  const folder = process.env.CLOUDINARY_FOLDER_NAME;
+  cloudinary.v2.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
   try {
     const deletedmsg = await Message.findByIdAndDelete(id);
-    if (!deletedmsg)
+    const fileurl = deletedmsg.fileurl;
+    let result =null;
+    if (fileurl) {
+      const filename = fileurl.substring(fileurl.lastIndexOf("/") + 1).split('.')[0];
+    
+      const public_id = `${folder}/${filename}`;
+    //   console.log('public_id', public_id);
+      result = await cloudinary.v2.uploader.destroy(public_id);  //foldername/filename = publicid
+    //   console.log("result", result);
+    }
+    if (!deletedmsg )
       return res.status(404).json({ error: "No such message found!" });
+
+    if(result && result?.result!=='ok')
+        return res.status(404).json({erro:"file not found in cloudinary"});
+
+
     return res.status(200).json(deletedmsg);
   } catch (err) {
     console.error(err);
@@ -156,4 +155,5 @@ export {
   deleteMessage,
   getByUserid,
   getMessageCount,
+  getSignature,
 };

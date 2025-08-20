@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { FiMoreVertical, FiEdit2, FiTrash2,FiDownload } from "react-icons/fi";
+import { FiMoreVertical, FiEdit2, FiTrash2, FiDownload } from "react-icons/fi";
 import {
   useDeleteMessageMutation,
   useUpdateMessageMutation,
@@ -131,24 +131,25 @@ const MessageCard = ({
                   />
                 ) : filetype === "application/pdf" ? (
                   <a
-                    href={fileurl.replace("/upload/", "/upload/fl_attachment/")}  //.replace("/upload/", "/upload/fl_attachment/")
-                    // download
+                    href={fileurl.replace("/upload/", "/upload/fl_attachment/")}
                     target="_blank"
-                    className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-teal-500 to-green-600 
-                 text-white text-sm font-semibold rounded-full shadow-lg 
-                 hover:from-green-600 hover:to-teal-700 transition-all duration-200"
+                    className="inline-flex items-center gap-2 px-5 py-2 bg-teal-700 
+             text-white text-sm font-semibold rounded-full shadow-md 
+             hover:bg-teal-800 transition-all duration-200"
                   >
                     <FiDownload className="w-5 h-5" />
-                    Download PDF
+                    {fileurl.slice(fileurl.lastIndexOf("/") + 1)}
                   </a>
                 ) : (
                   <a
                     href={fileurl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-blue-600 underline"
+                    className="inline-flex items-center gap-2 px-3 py-1.5 
+             bg-gray-200 text-gray-800 text-xs font-medium 
+             rounded-md shadow-sm hover:bg-gray-300 transition"
                   >
-                    📎 Download file
+                    📎 {fileurl.slice(fileurl.lastIndexOf("/") + 1)}
                   </a>
                 )}
               </div>

@@ -10,7 +10,7 @@ import { fileURLToPath } from 'url';
 
 //files
 import connectdb from './config/db.js';
-import cloudinary,{initCloudinary} from "./config/cloudinary.js";
+
 
 //config
 dotenv.config();
@@ -19,7 +19,7 @@ dotenv.config();
 //   key: process.env.CLOUDINARY_API_KEY,
 //   secret: process.env.CLOUDINARY_API_SECRET 
 // });
-initCloudinary();
+
 connectdb();
 
 

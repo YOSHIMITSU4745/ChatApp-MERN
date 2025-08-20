@@ -1,19 +1,19 @@
 import express from 'express';
-import { createMessage, deleteMessage, getByRoomid, getByUserid, getMessageCount, updateMessage } from '../controllers/messageControllers.js';
+import { createMessage, deleteMessage, getByRoomid, getByUserid, getMessageCount, getSignature, updateMessage } from '../controllers/messageControllers.js';
 import checkValidId from '../middlewares/checkValidId.js';
 import {authenticate ,authorizeAdmin} from '../middlewares/authMiddleware.js'
-import upload from '../middlewares/uploadfile.js';
+
 
 
 const router = express.Router();
 
-router.post('/',upload.single('file'),createMessage)
+router.post('/',createMessage)
 router.get('/user/:id',checkValidId,getByUserid)
+router.get('/get-signature',getSignature)
 router.get('/count',authenticate,authorizeAdmin,getMessageCount)
 router.get('/:id',checkValidId,getByRoomid)
 router.put('/:id',checkValidId,updateMessage)
 router.delete('/:id',checkValidId,deleteMessage)
-
 
 
 
