@@ -5,6 +5,7 @@ import {
   useDeleteMessageMutation,
   useUpdateMessageMutation,
 } from "../redux/api/messageApiSlice";
+// import JitsiMeetingEmbed from "./jitsiMeetingEmbed";
 
 const MessageCard = ({
   _id,
@@ -12,16 +13,20 @@ const MessageCard = ({
   content,
   fileurl,
   filetype,
+  jitsilink,
   time,
   align,
   isAuthor,
   refetch,
+  onJoinMeeting
 }) => {
   const isRight = align === "right";
   // console.log('isAuthor', isAuthor)
+  // console.log('jitsilink', jitsilink);
   const [showMenu, setShowMenu] = useState(false);
   const [editing, setEditing] = useState(false);
   const [editText, setEditText] = useState(content);
+
 
   const [updateMessage] = useUpdateMessageMutation();
   const [deletemessage] = useDeleteMessageMutation();
@@ -167,6 +172,20 @@ const MessageCard = ({
                 )}
               </div>
             )}
+            {/* jitsi vedio link */}
+            {jitsilink && (
+              <button
+                onClick={() =>
+                  onJoinMeeting(jitsilink.replace("https://meet.jit.si/", ""))
+                }
+                className="inline-flex items-center gap-2 px-5 py-2 bg-teal-700 
+            text-white text-sm font-semibold rounded-full shadow-md 
+            hover:bg-teal-800 transition-all duration-200"
+              >
+                🎥 Join Meeting
+              </button>
+            )}
+
             {/* Text message */}
             {content && <p className="text-sm">{content}</p>}
 

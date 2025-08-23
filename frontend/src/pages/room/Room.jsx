@@ -12,6 +12,8 @@ import {
   useSendFileToCloudinaryMutation,
 } from "../../redux/api/messageApiSlice";
 import RoomAccessGuard from "../../components/RoomAcessGuard";
+import JitsiMeetingEmbed from "../../components/jitsiMeetingEmbed";
+import { FiVideo } from "react-icons/fi";
 
 const Room = () => {
   const { id } = useParams();
@@ -26,13 +28,34 @@ const Room = () => {
   const [text, setText] = useState("");
   const [file, setfile] = useState(null);
   const fileinputref = useRef(null);
-  const bottomRef = useRef(null);
+  const bottomRef = useRef(null); //snack to bottom
 
-  const sendMessage = async () => {
+  const [activeMeetingfromchild, setActiveMeetingfromchild] = useState(null);
+
+  const [activeMeeting, setActiveMeeting] = useState(null); //jitsi meeting
+  // const [jitsiLink, setjitsilink] = useState(null);
+
+  const startMeeting = async () => {
+    try {
+      const jitsiRoom = `room-${id}-${Date.now()}`; // unique meeting id
+      const jl = `https://meet.jit.si/${jitsiRoom}`;
+
+      // setjitsilink(jl);
+      // send meeting link as a message
+
+      sendMessage({jitsiLink:jl});
+      // open iframe locally
+      setActiveMeeting({ room: jitsiRoom });
+    } catch (err) {
+      console.error("Failed to start meeting", err);
+    }
+  };
+
+  const sendMessage = async ({ jitsiLink: customLink } = {}) => {
     try {
       let fileurl = null;
       let filetype = null;
-      if (!text.trim() && !file) return;
+      if (!text.trim() && !file && !customLink) return;
       if (file) {
         const { timestamp, signature, api_key, cloud_name } =
           await getsignature().unwrap();
@@ -48,12 +71,14 @@ const Room = () => {
         fileurl = res.secure_url;
         filetype = file.type;
       }
+
       await postMessage({
         roomid: id,
         sender: userinfo.id,
         content: text,
         fileurl,
         filetype,
+        jitsiLink: customLink || null,
       }).unwrap();
       setText("");
       setfile(null);
@@ -117,6 +142,7 @@ const Room = () => {
                 content={msg.content}
                 fileurl={msg.fileurl}
                 filetype={msg.filetype}
+                jitsilink={msg.jitsiLink}
                 time={new Date(msg.createdAt).toLocaleTimeString([], {
                   hour: "2-digit",
                   minute: "2-digit",
@@ -124,11 +150,32 @@ const Room = () => {
                 align={msg.sender._id === userinfo.id ? "right" : "left"}
                 isAuthor={room.author._id === msg.sender._id}
                 refetch={refetch}
+                onJoinMeeting={(roomName) =>
+                  setActiveMeetingfromchild({ room: roomName })
+                }
               />
             ))
           )}
           <div ref={bottomRef}></div>
         </div>
+
+        {/*meeting joined by client*/}
+        {activeMeetingfromchild && (
+          <JitsiMeetingEmbed
+            roomName={activeMeetingfromchild.room}
+            userName={userinfo.username}
+            onClose={() => setActiveMeetingfromchild(null)}
+          />
+        )}
+
+        {/*meeting initiated by client */}
+        {activeMeeting && (
+          <JitsiMeetingEmbed
+            roomName={activeMeeting.room}
+            userName={userinfo.username}
+            onClose={() => setActiveMeeting(null)}
+          />
+        )}
 
         {/* ✅ Attached File Indicator (compact pill) */}
         {file && (
@@ -147,7 +194,7 @@ const Room = () => {
         )}
 
         {/* 🔽 Message Input */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 mt-3">
           {/* Hidden File Input */}
           <input
             type="file"
@@ -188,6 +235,14 @@ const Room = () => {
             }}
             className="flex-1 px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
           />
+          {/* jitsi calling*/}
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={startMeeting}
+            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-xl font-semibold flex items-center gap-2 transition"
+          >
+            <FiVideo /> Meet
+          </motion.button>
 
           {/* Send Button */}
           <motion.button
