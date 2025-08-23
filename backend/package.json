@@ -3,11 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "fullstack": "concurrently \"npm run backend \" \"npm run frontend\"",
-    "frontend": "cd frontend && npm run dev",
-    "backend": "nodemon backend/index.js",
-    "start":"nodemon backend/index.js",
-    "build":"npm install && npm install --prefix frontend && npm run build --prefix frontend"
+    "backend": "nodemon index.js",
+    "start": "node index.js",
+    "build": "npm install "
   },
   "keywords": [],
   "type": "module",
@@ -17,8 +15,10 @@
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
+    "cloudinary": "^2.7.0",
     "concurrently": "^9.2.0",
     "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
     "dotenv": "^17.0.1",
     "express": "^5.1.0",
     "framer-motion": "^12.23.0",

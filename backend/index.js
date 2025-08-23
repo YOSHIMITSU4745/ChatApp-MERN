@@ -1,24 +1,37 @@
+import dotenv from 'dotenv'
 import express from 'express'
 import cookieParser from 'cookie-parser';
-import dotenv from 'dotenv'
 import path from 'path'
 import userRoutes from './routes/userRoutes.js'
 import titleRoutes from './routes/titleRoutes.js'
 import roomRoutes from './routes/roomRoutes.js'
 import messageRoutes from './routes/messageRoutes.js'
-import { fileURLToPath } from 'url';
+import cors from 'cors'
 
 //files
 import connectdb from './config/db.js';
 
+
 //config
 dotenv.config();
+// console.log("Cloudinary config check:", {
+//   name: process.env.CLOUDINARY_CLOUD_NAME,
+//   key: process.env.CLOUDINARY_API_KEY,
+//   secret: process.env.CLOUDINARY_API_SECRET 
+// });
+
 connectdb();
 
 
 
 const port = process.env.PORT || 3001;
 const app = express();
+
+const allowedCors = ["https://chatapp-frontend-6jnr.onrender.com","http://localhost:5173"];
+
+app.use(cors({origin:allowedCors,
+    credentials:true
+}))
 
 
 const __dirname = path.resolve();
