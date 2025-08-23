@@ -140,6 +140,19 @@ const MessageCard = ({
                     <FiDownload className="w-5 h-5" />
                     {fileurl.slice(fileurl.lastIndexOf("/") + 1)}
                   </a>
+                ) : filetype === "audio/mpeg" ? (
+                  <div className="inline-block px-4 py-3 bg-teal-900 border border-teal-700 rounded-lg shadow-md mt-2 max-w-sm">
+                    <span className="block text-sm font-semibold text-teal-100 mb-2 break-words">
+                      {fileurl.slice(fileurl.lastIndexOf("/") + 1)}
+                    </span>
+                    <audio
+                      controls
+                      className="rounded-md max-w-full  text-teal-100 h-8"
+                    >
+                      <source src={fileurl} type="audio/mpeg" />
+                      Your browser does not support the audio element.
+                    </audio>
+                  </div>
                 ) : (
                   <a
                     href={fileurl}
