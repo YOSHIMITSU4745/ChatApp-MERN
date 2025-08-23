@@ -15,6 +15,7 @@ const messageSchema = new mongoose.Schema(
     content: { type: String,  trim: true },
     fileurl :{type:String},
     filetype :{type:String},
+    jitsiLink:{type:String},
 
   },
   { timestamps: true }

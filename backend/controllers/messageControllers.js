@@ -32,13 +32,13 @@ const getSignature = asyncHandler(async (req, res) => {
 });
 
 const createMessage = asyncHandler(async (req, res) => {
-  const { roomid, sender, content, fileurl, filetype } = req.body;
+  const { roomid, sender, content, fileurl, filetype ,jitsiLink} = req.body;
 
-  if (!roomid || !sender || !(content || fileurl))
+  if (!roomid || !sender || !(content || fileurl ||jitsiLink ))
     return res.status(400).json({ error: "Fields are empty!" });
 
   try {
-    const newmsg = new Message({ roomid, sender, content, fileurl, filetype });
+    const newmsg = new Message({ roomid, sender, content, fileurl, filetype,jitsiLink });
     const created = await newmsg.save();
 
     if (!created) res.status(400).json({ error: "Cant create message!" });
